@@ -19,3 +19,6 @@ This script main purpose is to scrap CROUS logement and notify when there is one
 6. Wait for the email
 
 _ps : if u want to test if the email thingy work , just call the function outside the loop and test._
+
+
+ps 2.0 : Code cloned and tweaked from https://github.com/imenebak/websites-scraping
