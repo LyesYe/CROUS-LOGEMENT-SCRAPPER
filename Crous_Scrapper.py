@@ -1,3 +1,4 @@
+import re
 import time
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select, WebDriverWait
@@ -9,19 +10,27 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 options = webdriver.ChromeOptions()
-options.add_argument("start-maximized")
+options.add_argument("start-maximized") 
 options.add_experimental_option("excludeSwitches", ["enable-automation"])
 options.add_experimental_option('useAutomationExtension', False)
 
 browser = webdriver.Chrome(options=options)
 browser.implicitly_wait(5)  # seconds
-browser.get('HERE CROUSS URL')
+browser.get('https://trouverunlogement.lescrous.fr/tools/31/search?bounds=5.2286902_43.3910329_5.5324758_43.1696205')
+# browser.get('https://trouverunlogement.lescrous.fr/tools/31/search?bounds=6.7872143_47.6713057_6.8948707_47.6203259')
 
 
 def test_chargement():
-    if "Logement individuel" in browser.page_source:
-        print('GOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO')
-        send_email_2_me("CROUS AVAILIBLE", "GO NOW CROUS DISPO ! CORDIALMEENT")
+    page_source = browser.page_source  # Get the page source
+
+    # Use a regular expression with optional 's' character
+    match = re.search(r'(\d+) logement(s?) trouvé(s?)', page_source)
+
+    if match:
+        n = int(match.group(1))  # Extract the integer 'n' from the match
+        print(f"{n} logement{'s' if n > 1 else ''} trouvé{'s' if n > 1 else ''}")
+        send_email_2_me(
+            f"CROUS AVAILIBLE ({n} logement{'s' if n > 1 else ''})", "GO NOW CROUS DISPO ! CORDIALMEENT")
     else:
         browser.refresh()
         time.sleep(20)
@@ -31,8 +40,8 @@ def test_chargement():
 
 def send_email_2_me(msg, sub):
     print(msg, sub)
-    mail = "YOUR EMAIL"
-    gmail_code = "YOUR Gmail application-specific password"
+    mail = "UR EMAIL"
+    gmail_code = "UR GMAIL CODE"
     msg = MIMEMultipart()
     msg['From'] = mail
     msg['To'] = mail
