@@ -39,8 +39,8 @@ def test_chargement():
 
 def send_email_2_me(msg, sub):
     print(msg, sub)
-    mail = "croustest@outlook.com"
-    password = "Lyesipog@@13102001"
+    mail = ""
+    password = ""
     msg = MIMEMultipart()
     msg['From'] = mail
     msg['To'] = mail
