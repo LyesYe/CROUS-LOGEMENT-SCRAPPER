@@ -8,6 +8,7 @@ from selenium.webdriver import ActionChains
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import pygame
 
 options = webdriver.ChromeOptions()
 options.add_argument("start-maximized") 
@@ -19,16 +20,23 @@ browser.implicitly_wait(5)  # seconds
 browser.get('https://trouverunlogement.lescrous.fr/tools/36/search?bounds=5.2286902_43.3910329_5.5324758_43.1696205')
 # browser.get('https://trouverunlogement.lescrous.fr/tools/31/search?bounds=6.7872143_47.6713057_6.8948707_47.6203259')
 
+# Initialize pygame mixer
+pygame.mixer.init()
 
 def test_chargement():
     page_source = browser.page_source  # Get the page source
 
     # Use a regular expression with optional 's' character
     match = re.search(r'CITE LUMINY', page_source)
+    # match = re.search(r'RESIDENCE LES BALUSTRES', page_source)
 
     if match:
         send_email_2_me(
         f"CROUS AVAILIBLE CITE LUMINY", "GO NOW CROUS DISPO ! CORDIALMEENT")
+        pygame.mixer.music.load('alert_sound.mp3')  # Load the sound
+        pygame.mixer.music.play(-1)  # Play the sound indefinitely
+        while True:
+            time.sleep(1)  # Keep the script running
     else:
         browser.refresh()
         time.sleep(20)
@@ -36,11 +44,10 @@ def test_chargement():
         test_chargement()
 
 
-
 def send_email_2_me(msg, sub):
     print(msg, sub)
-    mail = ""
-    password = ""
+    mail = "croustest@outlook.com"
+    password = "Lyesipog@@13102001"
     msg = MIMEMultipart()
     msg['From'] = mail
     msg['To'] = mail
